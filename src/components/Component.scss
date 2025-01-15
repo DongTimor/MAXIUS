@@ -640,18 +640,7 @@
   }
 }
 
-@media screen and (max-width: 568px) {
-  .page4 {
-    .page4-container {
-      .title {
-        font-size: 25px;
-        margin-bottom: 20px;
-      }
-    }
-  }
-}
-
-@media (max-width: 568) {
+@media (max-width: 568px) {
   .page1 {
     .tittle {
       font-size: 45px;
@@ -676,6 +665,15 @@
       margin-top: 20px;
       min-width: 232px;
       width: 232px;
+    }
+  }
+
+    .page4 {
+    .page4-container {
+      .title {
+        font-size: 25px;
+        margin-bottom: 20px;
+      }
     }
   }
 }
