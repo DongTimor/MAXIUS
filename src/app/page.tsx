@@ -1,95 +1,80 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+import React, { useEffect, useState } from "react";
+import Page1 from "@/components/Page1";
+import Page2 from "@/components/Page2";
+import Page3 from "@/components/Page3";
+import Page4 from "@/components/page4";
+import Page5 from "@/components/Page5";
+import "fullpage.js/dist/fullpage.css";
+import { toggleClass } from "@/utils/changeColor";
+import { ToggleMenu } from "@/components/ui/toggle-menu";
 
-export default function Home() {
+const Home: React.FC = () => {
+  const [language, setLanguage] = useState<"EN" | "KR">("EN");
+  const [currentSection, setCurrentSection] = useState(0);
+
+  useEffect(() => {
+    const loadFullPage = async () => {
+      const fullpage = (await import("fullpage.js")).default;
+      new fullpage("#fullpage", {
+        licenseKey: "gplv3-license",
+        autoScrolling: true,
+        scrollHorizontally: true,
+        navigation: true,
+        navigationPosition: "right",
+        anchors: [
+          "firstPage",
+          "secondPage",
+          "thirdPage",
+          "fourthPage",
+          "fifthPage",
+        ],
+        normalScrollElements: ".item-box",
+        credits: { enabled: false },
+
+        onLeave: function (origin: { index: number }, destination: { index: number }) {
+          console.log("now in", destination.index);
+          setCurrentSection(destination.index);
+        },
+
+        beforeLeave: function (origin: { index: number }, destination: { index: number }) {
+          if (
+            destination.index === 1 ||
+            destination.index === 2 ||
+            destination.index === 4
+          ) {
+            toggleClass(".logo", "white-text");
+            toggleClass("#fp-nav", "white-bg");
+            toggleClass(".changeLang", "white-text");
+            toggleClass(".btn-toggle", "white-text");
+          } else {
+            toggleClass(".logo", "white-text", false);
+            toggleClass("#fp-nav", "white-bg", false);
+            toggleClass(".changeLang", "white-text", false);
+            toggleClass(".btn-toggle", "white-text", false);
+          }
+        },
+      });
+    };
+
+    loadFullPage();
+  }, []);
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+    <div>
+      <div id="fullpage" className="full_page">
+        <Page1 currentSection={currentSection} />
+        <Page2 currentSection={currentSection} />
+        <Page3 currentSection={currentSection} />
+        <Page4 currentSection={currentSection} />
+        <Page5 currentSection={currentSection} />
+      </div>
+      <div className="logo">
+        <a href="#firstPage">MAXIUS</a>
+      </div>
+      <ToggleMenu language={language} onLanguageChange={setLanguage} />
     </div>
   );
-}
+};
+
+export default Home;
